@@ -49,7 +49,7 @@ QString searchConfigFile()
         {
             // found
             fileName=QDir(file.fileName()).canonicalPath();
-            qDebug("Using config file %s",qPrintable(fileName));
+            //qDebug("Using config file %s",qPrintable(fileName));
             return fileName;
         }
     }
@@ -105,9 +105,9 @@ int main(int argc, char *argv[])
     listenerSettings->beginGroup("listener");
     new HttpListener(listenerSettings,new RequestMapper(&app),&app);
 
-    qWarning("Application has started");
+    qWarning("=== Servidor Iniciado ===");
 
     app.exec();
 
-    qWarning("Application has stopped");
+    qWarning("=== Servidor Encerrado ===");
 }

@@ -36,7 +36,7 @@ TemplateLoader::TemplateLoader(QSettings* settings, QObject* parent)
     {
        textCodec=QTextCodec::codecForName(encoding.toLocal8Bit());
    }
-   qDebug("TemplateLoader: path=%s, codec=%s",qPrintable(templatePath),textCodec->name().data());
+   //qDebug("TemplateLoader: path=%s, codec=%s",qPrintable(templatePath),textCodec->name().data());
 }
 
 TemplateLoader::~TemplateLoader()
@@ -45,7 +45,7 @@ TemplateLoader::~TemplateLoader()
 QString TemplateLoader::tryFile(QString localizedName)
 {
     QString fileName=templatePath+"/"+localizedName+fileNameSuffix;
-    qDebug("TemplateCache: trying file %s",qPrintable(fileName));
+    //qDebug("TemplateCache: trying file %s",qPrintable(fileName));
     QFile file(fileName);
     if (file.exists()) {
         file.open(QIODevice::ReadOnly);

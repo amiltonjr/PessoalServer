@@ -33,7 +33,7 @@ HttpConnectionHandler::HttpConnectionHandler(QSettings* settings, HttpRequestHan
     connect(&readTimer, SIGNAL(timeout()), SLOT(readTimeout()));
     readTimer.setSingleShot(true);
 
-    qDebug("HttpConnectionHandler (%p): constructed", this);
+    //qDebug("HttpConnectionHandler (%p): constructed", this);
     this->start();
 }
 
@@ -42,7 +42,7 @@ HttpConnectionHandler::~HttpConnectionHandler()
 {
     quit();
     wait();
-    qDebug("HttpConnectionHandler (%p): destroyed", this);
+    //qDebug("HttpConnectionHandler (%p): destroyed", this);
 }
 
 
@@ -55,7 +55,7 @@ void HttpConnectionHandler::createSocket()
             QSslSocket* sslSocket=new QSslSocket();
             sslSocket->setSslConfiguration(*sslConfiguration);
             socket=sslSocket;
-            qDebug("HttpConnectionHandler (%p): SSL is enabled", this);
+            //qDebug("HttpConnectionHandler (%p): SSL is enabled", this);
             return;
         }
     #endif
@@ -66,7 +66,7 @@ void HttpConnectionHandler::createSocket()
 
 void HttpConnectionHandler::run()
 {
-    qDebug("HttpConnectionHandler (%p): thread started", this);
+    //qDebug("HttpConnectionHandler (%p): thread started", this);
     try
     {
         exec();
@@ -78,13 +78,13 @@ void HttpConnectionHandler::run()
     socket->close();
     delete socket;
     readTimer.stop();
-    qDebug("HttpConnectionHandler (%p): thread stopped", this);
+    //qDebug(("HttpConnectionHandler (%p): thread stopped", this);
 }
 
 
 void HttpConnectionHandler::handleConnection(tSocketDescriptor socketDescriptor)
 {
-    qDebug("HttpConnectionHandler (%p): handle new connection", this);
+    //qDebug(("HttpConnectionHandler (%p): handle new connection", this);
     busy = true;
     Q_ASSERT(socket->isOpen()==false); // if not, then the handler is already busy
 
@@ -103,7 +103,7 @@ void HttpConnectionHandler::handleConnection(tSocketDescriptor socketDescriptor)
         // Switch on encryption, if SSL is configured
         if (sslConfiguration)
         {
-            qDebug("HttpConnectionHandler (%p): Starting encryption", this);
+            //qDebug(("HttpConnectionHandler (%p): Starting encryption", this);
             ((QSslSocket*)socket)->startServerEncryption();
         }
     #endif
@@ -130,7 +130,7 @@ void HttpConnectionHandler::setBusy()
 
 void HttpConnectionHandler::readTimeout()
 {
-    qDebug("HttpConnectionHandler (%p): read timeout occured",this);
+    //qDebug(("HttpConnectionHandler (%p): read timeout occured",this);
 
     //Commented out because QWebView cannot handle this.
     //socket->write("HTTP/1.1 408 request timeout\r\nConnection: close\r\n\r\n408 request timeout\r\n");
@@ -144,7 +144,7 @@ void HttpConnectionHandler::readTimeout()
 
 void HttpConnectionHandler::disconnected()
 {
-    qDebug("HttpConnectionHandler (%p): disconnected", this);
+    //qDebug(("HttpConnectionHandler (%p): disconnected", this);
     socket->close();
     readTimer.stop();
     busy = false;
@@ -156,7 +156,7 @@ void HttpConnectionHandler::read()
     while (socket->bytesAvailable())
     {
         #ifdef SUPERVERBOSE
-            qDebug("HttpConnectionHandler (%p): read input",this);
+            //qDebug(("HttpConnectionHandler (%p): read input",this);
         #endif
 
         // Create new HttpRequest object if necessary
@@ -193,7 +193,7 @@ void HttpConnectionHandler::read()
         if (currentRequest->getStatus()==HttpRequest::complete)
         {
             readTimer.stop();
-            qDebug("HttpConnectionHandler (%p): received request",this);
+            //qDebug(("HttpConnectionHandler (%p): received request",this);
 
             // Copy the Connection:close header to the response
             HttpResponse response(socket);
@@ -231,7 +231,7 @@ void HttpConnectionHandler::read()
                 response.write(QByteArray(),true);
             }
 
-            qDebug("HttpConnectionHandler (%p): finished request",this);
+            //qDebug(("HttpConnectionHandler (%p): finished request",this);
 
             // Find out whether the connection must be closed
             if (!closeConnection)
