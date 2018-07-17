@@ -1,9 +1,9 @@
 #include "apicontroller.h"
-#include "templatecache.h"
-#include "template.h"
+//#include "templatecache.h"
+//#include "template.h"
 
 /** Cache for template files */
-extern TemplateCache* templateCache;
+//extern TemplateCache* templateCache;
 
 ApiController::ApiController()
 {}
