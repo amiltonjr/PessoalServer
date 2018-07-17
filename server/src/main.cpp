@@ -49,7 +49,7 @@ QString searchConfigFile()
         {
             // found
             fileName=QDir(file.fileName()).canonicalPath();
-            //qDebug("Using config file %s",qPrintable(fileName));
+            qDebug("Using config file %s",qPrintable(fileName));
             return fileName;
         }
     }
@@ -73,6 +73,9 @@ int main(int argc, char *argv[])
 
     app.setApplicationName("Server");
     app.setOrganizationName("AmiltonJr");
+
+    // Mensagem de boas-vindas
+    qDebug() << endl << "=== SERVIDOR - CADASTRO DE PESSOAL ===" << endl << endl;
 
     // Find the configuration file
     QString configFileName=searchConfigFile();
@@ -103,9 +106,33 @@ int main(int argc, char *argv[])
     // Configure and start the TCP listener
     QSettings* listenerSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
     listenerSettings->beginGroup("listener");
+
+    // Pergunta ao usuário se deseja alterar a porta do servidor
+    QTextStream s(stdin);
+    qDebug() << "A porta padrão selecionada é: " << listenerSettings->value("port").toInt() << endl;
+    qDebug() << "> Deseja utilizar essa porta? (S/N): ";
+    QString answer = s.readLine();
+
+    if (answer.startsWith('n', Qt::CaseInsensitive))
+    {
+        qDebug() << "> Digite o número da porta desejada: ";
+        int port = s.readLine().toInt();
+
+        // Valida o número da porta digitado
+        if (port < 80 || port > 49151)
+        {
+            qDebug() << "Número de porta inválido! Usando a porta " << listenerSettings->value("port").toInt() << "..." << endl;
+        }
+        else
+        {
+            listenerSettings->setValue("port", port);
+        }
+    }
+
+
     new HttpListener(listenerSettings,new RequestMapper(&app),&app);
 
-    qWarning("=== Servidor Iniciado ===");
+    qWarning() << "=== Servidor Iniciado na porta " << listenerSettings->value("port").toInt() << " ===";
 
     app.exec();
 
