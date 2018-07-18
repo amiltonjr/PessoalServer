@@ -10,64 +10,17 @@
 
 using namespace amiltonjunior;
 
-/** Cache for template files */
+// Variáveis globais
 TemplateCache* templateCache;
-
-/** Storage for session cookies */
 HttpSessionStore* sessionStore;
-
-/** Controller for static files */
 StaticFileController* staticFileController;
-
-/** Redirects log messages to a file */
 FileLogger* logger;
 
+// Protótipos das funções
+int main(int argc, char *argv[]);
+QString searchConfigFile();
 
-/** Search the configuration file */
-QString searchConfigFile()
-{
-    QString binDir=QCoreApplication::applicationDirPath();
-    QString appName=QCoreApplication::applicationName();
-    QString fileName(appName+".ini");
-
-    QStringList searchList;
-    searchList.append(binDir);
-    searchList.append(binDir+"/etc");
-    searchList.append(binDir+"/../etc");
-    searchList.append(binDir+"/../../etc"); // for development without shadow build
-    searchList.append(binDir+"/../"+appName+"/etc"); // for development with shadow build
-    searchList.append(binDir+"/../../"+appName+"/etc"); // for development with shadow build
-    searchList.append(binDir+"/../../../"+appName+"/etc"); // for development with shadow build
-    searchList.append(binDir+"/../../../../"+appName+"/etc"); // for development with shadow build
-    searchList.append(binDir+"/../../../../../"+appName+"/etc"); // for development with shadow build
-    searchList.append(QDir::rootPath()+"etc/opt");
-    searchList.append(QDir::rootPath()+"etc");
-
-    foreach (QString dir, searchList)
-    {
-        QFile file(dir+"/"+fileName);
-        if (file.exists())
-        {
-            // found
-            fileName=QDir(file.fileName()).canonicalPath();
-            qDebug("Using config file %s",qPrintable(fileName));
-            return fileName;
-        }
-    }
-
-    // not found
-    foreach (QString dir, searchList)
-    {
-        qWarning("%s/%s not found",qPrintable(dir),qPrintable(fileName));
-    }
-    qFatal("Cannot find config file %s",qPrintable(fileName));
-    return 0;
-}
-
-
-/**
-  Entry point of the program.
-*/
+// Função principal do programa
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc,argv);
@@ -114,26 +67,24 @@ int main(int argc, char *argv[])
     qDebug() << "> Deseja utilizar essa porta? (S/N): ";
     QString answer = s.readLine();
 
+    // Se a resposta for "não"
     if (answer.startsWith('n', Qt::CaseInsensitive))
     {
         qDebug() << "> Digite o número da porta desejada: ";
         int port = s.readLine().toInt();
 
-        // Valida o número da porta digitado
+        // Se o número da porta digitado for inválido
         if (port < 80 || port > 49151)
-        {
             qDebug() << "Número de porta inválido! Usando a porta " << listenerSettings->value("port").toInt() << "..." << endl;
-        }
         else
-        {
             listenerSettings->setValue("port", port);
-        }
     }
 
     // Obtém o IP do servidor
-    QString serverHost = "127.0.0.1";
-    QList<QHostAddress> list = QNetworkInterface::allAddresses();
+    QString serverHost          = "127.0.0.1"; // Endereço IP padrão
+    QList<QHostAddress> list    = QNetworkInterface::allAddresses();
 
+    // Percorre todos os endereços da lista obtido da interface
     for (int nIter = 0; nIter < list.count(); nIter++)
     {
        if (!list[nIter].isLoopback())
@@ -141,11 +92,54 @@ int main(int argc, char *argv[])
              serverHost = list[nIter].toString();
     }
 
+    // Inicializa o servidor HTTP
     new HttpListener(listenerSettings, new RequestMapper(&app), &app);
 
     qWarning() << "=== Servidor Iniciado com IP " << serverHost << " na porta " << listenerSettings->value("port").toInt() << " ===";
 
+    // Executa o código enquanto o terminal estiver aberto
     app.exec();
 
     qWarning("=== Servidor Encerrado ===");
+}
+
+/** Search the configuration file */
+QString searchConfigFile()
+{
+    QString binDir=QCoreApplication::applicationDirPath();
+    QString appName=QCoreApplication::applicationName();
+    QString fileName(appName+".ini");
+
+    QStringList searchList;
+    searchList.append(binDir);
+    searchList.append(binDir+"/etc");
+    searchList.append(binDir+"/../etc");
+    searchList.append(binDir+"/../../etc"); // for development without shadow build
+    searchList.append(binDir+"/../"+appName+"/etc"); // for development with shadow build
+    searchList.append(binDir+"/../../"+appName+"/etc"); // for development with shadow build
+    searchList.append(binDir+"/../../../"+appName+"/etc"); // for development with shadow build
+    searchList.append(binDir+"/../../../../"+appName+"/etc"); // for development with shadow build
+    searchList.append(binDir+"/../../../../../"+appName+"/etc"); // for development with shadow build
+    searchList.append(QDir::rootPath()+"etc/opt");
+    searchList.append(QDir::rootPath()+"etc");
+
+    foreach (QString dir, searchList)
+    {
+        QFile file(dir+"/"+fileName);
+        if (file.exists())
+        {
+            // found
+            fileName=QDir(file.fileName()).canonicalPath();
+            qDebug("Using config file %s",qPrintable(fileName));
+            return fileName;
+        }
+    }
+
+    // not found
+    foreach (QString dir, searchList)
+    {
+        qWarning("%s/%s not found",qPrintable(dir),qPrintable(fileName));
+    }
+    qFatal("Cannot find config file %s",qPrintable(fileName));
+    return 0;
 }

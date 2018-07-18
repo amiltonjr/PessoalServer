@@ -17,8 +17,8 @@ ApiController::ApiController()
 void ApiController::service(HttpRequest& request, HttpResponse& response)
 {
     // Processa os dados recebidos
-    QByteArray dt = request.getParameter("data");
-    QString data = dt.constData();
+    QByteArray dt   = request.getParameter("data");
+    QString data    = dt.constData();
 
     //qDebug() << "data = " << data;
 
@@ -35,8 +35,8 @@ void ApiController::service(HttpRequest& request, HttpResponse& response)
         qDebug() << "> Dados recebidos pela API:" << endl;
 
         // Converte os dados recebidos para JSON
-        QJsonDocument jsonResponse = QJsonDocument::fromJson(data.toUtf8());
-        QJsonObject jsonObject = jsonResponse.object();
+        QJsonDocument jsonResponse  = QJsonDocument::fromJson(data.toUtf8());
+        QJsonObject jsonObject      = jsonResponse.object();
 
         // Obtém a lista de pessoas
         QJsonArray person = jsonObject["person"].toArray();
