@@ -20,7 +20,7 @@ void ApiController::service(HttpRequest& request, HttpResponse& response)
     QByteArray dt   = request.getParameter("data");
     QString data    = dt.constData();
 
-    //qDebug() << "data = " << data;
+    //qDebug() << "data = " << data << endl << "Method = " << request.getMethod();
 
     // Define o cabeçalho de resposta
     response.setHeader("Content-Type", "application/json; charset=utf-8");
