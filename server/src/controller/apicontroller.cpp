@@ -17,7 +17,7 @@ void ApiController::service(HttpRequest& request, HttpResponse& response)
     //qDebug() << "data = " << data;
 
     // Processa a resposta
-    response.setHeader("Content-Type", "application/json");
+    response.setHeader("Content-Type", "application/json; charset=utf-8");
 
     // Verifica se recebeu os dados
     if (data.length() > 5)
