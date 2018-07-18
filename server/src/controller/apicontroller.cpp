@@ -5,6 +5,7 @@
 #include <QList>
 #include <QJsonArray>
 #include <QObject>
+#include <QDateTime>
 
 // Método construtor
 ApiController::ApiController()
@@ -32,7 +33,7 @@ void ApiController::service(HttpRequest& request, HttpResponse& response)
         response.setStatus(200, "OK");
         response.write("{\"response\":{\"code\":200,\"description\":\"OK\"}}");
 
-        qDebug() << "> Dados recebidos pela API:" << endl;
+        qDebug() << QDateTime::currentDateTime().toString("dd/MM/yyyy hh:mm:ss") << "> Dados recebidos pela API:" << endl;
 
         // Converte os dados recebidos para JSON
         QJsonDocument jsonResponse  = QJsonDocument::fromJson(data.toUtf8());
