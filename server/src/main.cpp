@@ -130,7 +130,7 @@ QString searchConfigFile()
         {
             // found
             fileName=QDir(file.fileName()).canonicalPath();
-            qDebug("Using config file %s",qPrintable(fileName));
+            qDebug("Usando o arquivo de configuração %s",qPrintable(fileName));
             return fileName;
         }
     }
@@ -138,8 +138,8 @@ QString searchConfigFile()
     // not found
     foreach (QString dir, searchList)
     {
-        qWarning("%s/%s not found",qPrintable(dir),qPrintable(fileName));
+        qWarning("%s/%s não encontrado",qPrintable(dir),qPrintable(fileName));
     }
-    qFatal("Cannot find config file %s",qPrintable(fileName));
+    qFatal("Não foi possível localizar o arquivo de configuração %s",qPrintable(fileName));
     return 0;
 }
