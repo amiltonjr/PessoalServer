@@ -135,7 +135,8 @@ OBJECTS       = main.o \
 		moc_staticfilecontroller.o \
 		moc_templateloader.o \
 		moc_templatecache.o
-DIST          = /Applications/qt/5.7/clang_64/mkspecs/features/spec_pre.prf \
+DIST          = ../server/etc/README \
+		/Applications/qt/5.7/clang_64/mkspecs/features/spec_pre.prf \
 		/Applications/qt/5.7/clang_64/mkspecs/qdevice.pri \
 		/Applications/qt/5.7/clang_64/mkspecs/features/device_config.prf \
 		/Applications/qt/5.7/clang_64/mkspecs/common/unix.conf \
@@ -1330,6 +1331,8 @@ compiler_clean: compiler_moc_header_clean
 
 main.o: ../server/src/main.cpp /Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QCoreApplication \
 		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qcoreapplication.h \
+		/Applications/qt/5.7/clang_64/lib/QtNetwork.framework/Headers/QNetworkInterface \
+		/Applications/qt/5.7/clang_64/lib/QtNetwork.framework/Headers/qnetworkinterface.h \
 		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QDir \
 		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qdir.h \
 		../QtWebApp/httpserver/httplistener.h \
@@ -1677,22 +1680,14 @@ apicontroller.o: ../server/src/controller/apicontroller.cpp ../server/src/contro
 		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QList \
 		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qlist.h \
 		../QtWebApp/httpserver/httprequesthandler.h \
-		../QtWebApp/templateengine/templatecache.h \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QCache \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qcache.h \
-		../QtWebApp/templateengine/templateglobal.h \
-		../QtWebApp/templateengine/templateloader.h \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QTextCodec \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qtextcodec.h \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QMutex \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qmutex.h \
-		../QtWebApp/templateengine/template.h \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QRegExp \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qregexp.h \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QIODevice \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qiodevice.h \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QFile \
-		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qfile.h
+		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QJsonDocument \
+		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qjsondocument.h \
+		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QJsonObject \
+		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qjsonobject.h \
+		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QJsonArray \
+		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qjsonarray.h \
+		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/QObject \
+		/Applications/qt/5.7/clang_64/lib/QtCore.framework/Headers/qobject.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o apicontroller.o ../server/src/controller/apicontroller.cpp
 
 logmessage.o: ../QtWebApp/logging/logmessage.cpp ../QtWebApp/logging/logmessage.h \

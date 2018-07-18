@@ -6,9 +6,14 @@
 #include <QJsonArray>
 #include <QObject>
 
+// Método construtor
 ApiController::ApiController()
 {}
 
+// Método que faz o controle do serviço da API
+// @param request - Ponteiro para o objeto HttpRequest da requisição
+// @param response - Ponteiro para o objeto HttpResponse de resposta
+// @return void
 void ApiController::service(HttpRequest& request, HttpResponse& response)
 {
     // Processa os dados recebidos
@@ -17,10 +22,10 @@ void ApiController::service(HttpRequest& request, HttpResponse& response)
 
     //qDebug() << "data = " << data;
 
-    // Processa a resposta
+    // Define o cabeçalho de resposta
     response.setHeader("Content-Type", "application/json; charset=utf-8");
 
-    // Verifica se recebeu os dados
+    // Verifica se recebeu dados
     if (data.length() > 5)
     {
         // Status OK
@@ -47,6 +52,7 @@ void ApiController::service(HttpRequest& request, HttpResponse& response)
             qDebug() << "Sexo: " << obj["sex"].toString() << endl;
         }
     }
+    // Se não recebeu dados ou inválidos
     else
     {
         // Status de erro

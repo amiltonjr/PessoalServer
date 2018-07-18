@@ -34,3 +34,6 @@ include(../QtWebApp/logging/logging.pri)
 include(../QtWebApp/httpserver/httpserver.pri)
 include(../QtWebApp/templateengine/templateengine.pri)
 # Not used: include(../QtWebApp/qtservice/qtservice.pri)
+
+DISTFILES += \
+    etc/README
