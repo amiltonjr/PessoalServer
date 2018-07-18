@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+#include <QNetworkInterface>
 #include <QDir>
 #include "httplistener.h"
 #include "templatecache.h"
@@ -129,10 +130,20 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Obtém o IP do servidor
+    QString serverHost = "127.0.0.1";
+    QList<QHostAddress> list = QNetworkInterface::allAddresses();
 
-    new HttpListener(listenerSettings,new RequestMapper(&app),&app);
+    for (int nIter = 0; nIter < list.count(); nIter++)
+    {
+       if (!list[nIter].isLoopback())
+          if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol )
+             serverHost = list[nIter].toString();
+    }
 
-    qWarning() << "=== Servidor Iniciado na porta " << listenerSettings->value("port").toInt() << " ===";
+    new HttpListener(listenerSettings, new RequestMapper(&app), &app);
+
+    qWarning() << "=== Servidor Iniciado com IP " << serverHost << " na porta " << listenerSettings->value("port").toInt() << " ===";
 
     app.exec();
 
