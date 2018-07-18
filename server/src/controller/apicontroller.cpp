@@ -22,7 +22,9 @@ void ApiController::service(HttpRequest& request, HttpResponse& response)
     // Verifica se recebeu os dados
     if (data.length() > 5)
     {
-        response.write("{\"result\":\"OK\"}");
+        // Status OK
+        response.setStatus(200, "OK");
+        response.write("{\"response\":{\"code\":200,\"description\":\"OK\"}}");
 
         qDebug() << "> Dados recebidos pela API:" << endl;
 
@@ -40,12 +42,15 @@ void ApiController::service(HttpRequest& request, HttpResponse& response)
 
             // Imprime os dados no terminal
             qDebug() << "Nome: " << obj["name"].toString();
-            qDebug() << "Idade: " << obj["age"].toString();
+            qDebug() << "Idade: " << obj["age"].toInt();
             qDebug() << "Sexo: " << obj["sex"].toString() << endl;
         }
     }
     else
     {
-        response.write("{\"result\":\"ERROR\"}");
+        // Status de erro
+        response.setStatus(405, "Entrada inválida");
+        response.write("{\"response\":{\"code\":405,\"description\":\"Entrada inválida\"}}");
+
     }
 }
