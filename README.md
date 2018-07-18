@@ -8,7 +8,7 @@ Data de produção: Julho de 2018
 
 Recursos Utilizados:
     IDE: Qt Creator 4.7.0-rc1
-    Biblioteca externa: QtWebServer - Autor: Stefan Frings
+    Biblioteca externa: QtWebServer 3.11.0 - Autor: Stefan Frings
     Padrão API: Swagger 2.0
 
 Classe principal:
