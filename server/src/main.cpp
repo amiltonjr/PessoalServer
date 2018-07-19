@@ -1,3 +1,9 @@
+/******
+ * SERVIDOR - CADASTRO DE PESSOAL
+ * Criado por: Amilton Fontoura de Camargo Junior
+ * Data: Julho de 2018
+******/
+
 #include <QCoreApplication>
 #include <QNetworkInterface>
 #include <QDir>
@@ -32,33 +38,33 @@ int main(int argc, char *argv[])
     qDebug() << endl << "=== SERVIDOR - CADASTRO DE PESSOAL ===" << endl << endl;
 
     // Encontra o arquivo de configuração
-    QString configFileName=searchConfigFile();
+    QString configFileName = searchConfigFile();
 
     // Configura o salvamento de log para arquivo
     /*
-    QSettings* logSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
+    QSettings* logSettings = new QSettings(configFileName, QSettings::IniFormat, &app);
     logSettings->beginGroup("logging");
-    FileLogger* logger=new FileLogger(logSettings,10000,&app);
+    FileLogger* logger = new FileLogger(logSettings, 10000, &app);
     logger->installMsgHandler();
     */
 
     // Configura o carregamento e cache de template
-    QSettings* templateSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
+    QSettings* templateSettings = new QSettings(configFileName, QSettings::IniFormat, &app);
     templateSettings->beginGroup("templates");
-    templateCache=new TemplateCache(templateSettings,&app);
+    templateCache = new TemplateCache(templateSettings, &app);
 
     // Configura o salvamento de sessions
-    QSettings* sessionSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
+    QSettings* sessionSettings = new QSettings(configFileName, QSettings::IniFormat, &app);
     sessionSettings->beginGroup("sessions");
-    sessionStore=new HttpSessionStore(sessionSettings,&app);
+    sessionStore = new HttpSessionStore(sessionSettings, &app);
 
     // Configura o controller de página estática
-    QSettings* fileSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
+    QSettings* fileSettings = new QSettings(configFileName, QSettings::IniFormat, &app);
     fileSettings->beginGroup("docroot");
-    staticFileController=new StaticFileController(fileSettings,&app);
+    staticFileController=new StaticFileController(fileSettings, &app);
 
     // Configura e inicializa o listener TCP
-    QSettings* listenerSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
+    QSettings* listenerSettings = new QSettings(configFileName, QSettings::IniFormat, &app);
     listenerSettings->beginGroup("listener");
 
     // Pergunta ao usuário se deseja alterar a porta padrão do servidor
@@ -85,7 +91,7 @@ int main(int argc, char *argv[])
     QList<QHostAddress> list    = QNetworkInterface::allAddresses();
 
     // Percorre todos os endereços da lista obtido da interface
-    for (int nIter = 0; nIter < list.count(); nIter++)
+    for (int nIter=0; nIter<list.count(); nIter++)
     {
        if (!list[nIter].isLoopback())
           if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol )
@@ -110,20 +116,20 @@ int main(int argc, char *argv[])
 // Método que localiza o arquivo de configuração do servidor
 QString searchConfigFile()
 {
-    QString binDir=QCoreApplication::applicationDirPath();
-    QString appName=QCoreApplication::applicationName();
+    QString binDir = QCoreApplication::applicationDirPath();
+    QString appName = QCoreApplication::applicationName();
     QString fileName(appName+".ini");
 
     QStringList searchList;
     searchList.append(binDir);
     searchList.append(binDir+"/etc");
     searchList.append(binDir+"/../etc");
-    searchList.append(binDir+"/../../etc"); // for development without shadow build
-    searchList.append(binDir+"/../"+appName+"/etc"); // for development with shadow build
-    searchList.append(binDir+"/../../"+appName+"/etc"); // for development with shadow build
-    searchList.append(binDir+"/../../../"+appName+"/etc"); // for development with shadow build
-    searchList.append(binDir+"/../../../../"+appName+"/etc"); // for development with shadow build
-    searchList.append(binDir+"/../../../../../"+appName+"/etc"); // for development with shadow build
+    searchList.append(binDir+"/../../etc");
+    searchList.append(binDir+"/../"+appName+"/etc");
+    searchList.append(binDir+"/../../"+appName+"/etc");
+    searchList.append(binDir+"/../../../"+appName+"/etc");
+    searchList.append(binDir+"/../../../../"+appName+"/etc");
+    searchList.append(binDir+"/../../../../../"+appName+"/etc");
     searchList.append(QDir::rootPath()+"etc/opt");
     searchList.append(QDir::rootPath()+"etc");
 
@@ -132,8 +138,8 @@ QString searchConfigFile()
         QFile file(dir+"/"+fileName);
         if (file.exists())
         {
-            // found
-            fileName=QDir(file.fileName()).canonicalPath();
+            // Arquivo encontrado
+            fileName = QDir(file.fileName()).canonicalPath();
             qDebug("Usando o arquivo de configuração %s",qPrintable(fileName));
             return fileName;
         }
@@ -141,9 +147,8 @@ QString searchConfigFile()
 
     // Caso o arquivo não tenha sido encontrado
     foreach (QString dir, searchList)
-    {
         qWarning("%s/%s não encontrado",qPrintable(dir),qPrintable(fileName));
-    }
+
     qFatal("Não foi possível localizar o arquivo de configuração %s",qPrintable(fileName));
 
     return 0;
