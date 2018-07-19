@@ -2,6 +2,12 @@
  * SERVIDOR - CADASTRO DE PESSOAL
  * Criado por: Amilton Fontoura de Camargo Junior
  * Data: Julho de 2018
+ *
+ * Observação: Uma parte significativa do projeto foi criada usando a biblioteca
+ * QtWebServer de Stefan Frings. Como o código fornecido pelo autor da biblioteca
+ * não prejudica a funcionalidade do servidor de API, os comentários e métodos
+ * criados pelo mesmo estão presentes no projeto, exceto nos scripts que foram
+ * escritos especificamente para essa aplicação.
 ******/
 
 #include <QCoreApplication>
