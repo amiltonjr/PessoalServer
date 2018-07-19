@@ -65,6 +65,11 @@ public:
     void listen();
 
     /**
+      Informa se o servidor está rodando.
+    */
+    bool isServerRunning();
+
+    /**
      Closes the listener, waits until all pending requests are processed,
      then closes the connection pool.
     */

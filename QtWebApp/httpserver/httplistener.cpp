@@ -10,6 +10,9 @@
 
 using namespace amiltonjunior;
 
+// Flag que indica se o servidor está rodando
+bool isRunning = false;
+
 HttpListener::HttpListener(QSettings* settings, HttpRequestHandler* requestHandler, QObject *parent)
     : QTcpServer(parent)
 {
@@ -43,11 +46,24 @@ void HttpListener::listen()
     QTcpServer::listen(host.isEmpty() ? QHostAddress::Any : QHostAddress(host), port);
     if (!isListening())
     {
-        qCritical("HttpListener: Cannot bind on port %i: %s",port,qPrintable(errorString()));
+        // Marca que o servidor não está rodando
+        isRunning = false;
+
+        //qCritical("HttpListener: Cannot bind on port %i: %s",port,qPrintable(errorString()));
+        qDebug() << "ERRO: a porta " << port << " já está sendo usada!";
     }
     else {
+        // Marca que o servidor está rodando
+        isRunning = true;
+
         //qDebug("HttpListener: Listening on port %i",port);
     }
+}
+
+
+// Método que retorna com o status de execução do servidor/listener
+bool HttpListener::isServerRunning() {
+    return isRunning;
 }
 
 

@@ -14,7 +14,7 @@ using namespace amiltonjunior;
 TemplateCache* templateCache;
 HttpSessionStore* sessionStore;
 StaticFileController* staticFileController;
-FileLogger* logger;
+FileLogger* logger; // Flag que indica se o servidor está rodando
 
 // Protótipos das funções
 int main(int argc, char *argv[]);
@@ -93,7 +93,11 @@ int main(int argc, char *argv[])
     }
 
     // Inicializa o servidor HTTP
-    new HttpListener(listenerSettings, new RequestMapper(&app), &app);
+    HttpListener *listener = new HttpListener(listenerSettings, new RequestMapper(&app), &app);
+
+    // Se o listener não iniciou, encerra a execução
+    if (!listener->isServerRunning())
+        return 0;
 
     qWarning() << "=== Servidor Iniciado com IP " << serverHost << " na porta " << listenerSettings->value("port").toInt() << " ===";
 
