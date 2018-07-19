@@ -23,3 +23,6 @@ Arquivo de configuração do servidor:
 Arquivos de modelo da API:
 	Model/swagger.yaml
 	swagger.json
+
+Arquivo executável:
+	1.0.0/server
