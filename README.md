@@ -19,3 +19,7 @@ Classe de controle da API:
 
 Arquivo de configuração do servidor:
 	server/etc/Server.ini
+
+Arquivos de modelo da API:
+	Model/swagger.yaml
+	swagger.json
