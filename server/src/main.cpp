@@ -14,7 +14,7 @@ using namespace amiltonjunior;
 TemplateCache* templateCache;
 HttpSessionStore* sessionStore;
 StaticFileController* staticFileController;
-FileLogger* logger; // Flag que indica se o servidor está rodando
+FileLogger* logger;
 
 // Protótipos das funções
 int main(int argc, char *argv[]);
@@ -31,10 +31,10 @@ int main(int argc, char *argv[])
     // Mensagem de boas-vindas
     qDebug() << endl << "=== SERVIDOR - CADASTRO DE PESSOAL ===" << endl << endl;
 
-    // Find the configuration file
+    // Encontra o arquivo de configuração
     QString configFileName=searchConfigFile();
 
-    // Configure logging into a file
+    // Configura o salvamento de log para arquivo
     /*
     QSettings* logSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
     logSettings->beginGroup("logging");
@@ -42,26 +42,26 @@ int main(int argc, char *argv[])
     logger->installMsgHandler();
     */
 
-    // Configure template loader and cache
+    // Configura o carregamento e cache de template
     QSettings* templateSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
     templateSettings->beginGroup("templates");
     templateCache=new TemplateCache(templateSettings,&app);
 
-    // Configure session store
+    // Configura o salvamento de sessions
     QSettings* sessionSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
     sessionSettings->beginGroup("sessions");
     sessionStore=new HttpSessionStore(sessionSettings,&app);
 
-    // Configure static file controller
+    // Configura o controller de página estática
     QSettings* fileSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
     fileSettings->beginGroup("docroot");
     staticFileController=new StaticFileController(fileSettings,&app);
 
-    // Configure and start the TCP listener
+    // Configura e inicializa o listener TCP
     QSettings* listenerSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
     listenerSettings->beginGroup("listener");
 
-    // Pergunta ao usuário se deseja alterar a porta do servidor
+    // Pergunta ao usuário se deseja alterar a porta padrão do servidor
     QTextStream s(stdin);
     qDebug() << "A porta padrão selecionada é: " << listenerSettings->value("port").toInt() << endl;
     qDebug() << "> Deseja utilizar essa porta? (S/N): ";
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
         qDebug() << "> Digite o número da porta desejada: ";
         int port = s.readLine().toInt();
 
-        // Se o número da porta digitado for inválido
+        // Se o número da porta digitado for inválido, usa a padrão
         if (port < 80 || port > 49151)
             qDebug() << "Número de porta inválido! Usando a porta " << listenerSettings->value("port").toInt() << "..." << endl;
         else
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     qWarning("=== Servidor Encerrado ===");
 }
 
-/** Search the configuration file */
+// Método que localiza o arquivo de configuração do servidor
 QString searchConfigFile()
 {
     QString binDir=QCoreApplication::applicationDirPath();
@@ -139,11 +139,12 @@ QString searchConfigFile()
         }
     }
 
-    // not found
+    // Caso o arquivo não tenha sido encontrado
     foreach (QString dir, searchList)
     {
         qWarning("%s/%s não encontrado",qPrintable(dir),qPrintable(fileName));
     }
     qFatal("Não foi possível localizar o arquivo de configuração %s",qPrintable(fileName));
+
     return 0;
 }
